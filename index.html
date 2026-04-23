@@ -302,6 +302,33 @@ table.lv a{color:var(--blue);text-decoration:underline;font-size:12px}
 .cp-pr{font-size:12px;color:var(--ink3);font-family:var(--fm)}
 .toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:white;padding:12px 18px;border-radius:var(--rl);font-size:13px;font-weight:500;box-shadow:var(--shl);z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.4,0,.2,1);border:1px solid rgba(184,150,106,.18)}
 .toast.show{transform:translateY(0);opacity:1}
+.pcard-del{background:transparent;border:none;color:var(--ink3);font-size:16px;cursor:pointer;padding:2px 6px;border-radius:var(--r);line-height:1;transition:all .15s;flex-shrink:0}
+.pcard-del:hover{background:var(--red-bg);color:var(--red)}
+.plan-upload{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;cursor:pointer;z-index:2}
+.plan-upload-ic{width:56px;height:56px;border-radius:50%;background:var(--cream2);border:2px dashed var(--cream3);display:flex;align-items:center;justify-content:center;font-size:24px;transition:all .2s}
+.plan-upload:hover .plan-upload-ic{background:var(--brass3);border-color:var(--brass)}
+.plan-upload-tx{font-size:13px;color:var(--ink3);font-weight:500}
+.plan-upload-sub{font-size:11px;color:var(--ink3);opacity:.7}
+.cat-img{width:80px;height:60px;object-fit:cover;border-radius:var(--r);border:1px solid var(--cream3);flex-shrink:0}
+.cat-img-ph{width:80px;height:60px;border-radius:var(--r);border:1px dashed var(--cream3);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;background:var(--cream2);cursor:pointer}
+.cat-img-ph:hover{border-color:var(--brass);background:var(--brass3)}
+.citem-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;padding:16px 20px}
+.citem-tile{background:white;border:1.5px solid var(--cream3);border-radius:var(--rl);overflow:hidden;transition:all .15s;cursor:default}
+.citem-tile:hover{box-shadow:var(--shm);border-color:var(--brass2)}
+.citem-tile-img{width:100%;height:120px;object-fit:cover;background:var(--cream2);display:flex;align-items:center;justify-content:center;font-size:32px}
+.citem-tile-img img{width:100%;height:100%;object-fit:cover}
+.citem-tile-body{padding:10px 12px}
+.citem-tier-badge{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:2px 7px;border-radius:10px;margin-bottom:5px;display:inline-block}
+.task-list{padding:12px}
+.task-item{background:white;border:1px solid var(--amber-bd);border-radius:var(--rl);padding:10px 12px;margin-bottom:8px;cursor:pointer;transition:all .15s}
+.task-item:hover{border-color:var(--amber);box-shadow:var(--sh)}
+.task-label{font-size:12px;font-weight:600;color:var(--amber);margin-bottom:3px;display:flex;align-items:center;gap:5px}
+.task-name{font-size:13px;font-weight:500;color:var(--ink)}
+.task-sub{font-size:11px;color:var(--ink3);margin-top:2px}
+.client-budget-bar{background:white;border:1px solid var(--cream3);border-radius:var(--rl);padding:16px 20px;margin-bottom:16px}
+.upload-drop{border:2px dashed var(--cream3);border-radius:var(--rl);padding:32px;text-align:center;cursor:pointer;transition:all .2s}
+.upload-drop:hover,.upload-drop.over{border-color:var(--brass);background:rgba(184,150,106,.04)}
+.upload-drop input{display:none}
 
 </style>
 </head>
@@ -336,12 +363,12 @@ table.lv a{color:var(--blue);text-decoration:underline;font-size:12px}
   </nav>
   <div class="lhero">
     <div class="lhl">
-      <div class="lbrow">Construction Communication Platform</div>
-      <h1 class="lh1">Cross Your T's.<br><em>Dot Your Plans.</em></h1>
-      <p class="ltag">The first spec and selection platform built directly on top of your construction drawings. Every decision, in context, at the moment it's made.</p>
+      <div class="lbrow">Built for Builders. Loved by Clients.</div>
+      <h1 class="lh1">Stop Chasing<br><em>Client Decisions.</em></h1>
+      <p class="ltag">Builders lose thousands per project to delayed selections, verbal change orders, and clients who can't visualize what they're choosing. SpecDot pins every decision directly to your plans — so nothing falls through the cracks.</p>
       <div class="lcta-r">
-        <button class="lcta-p" onclick="loginAs('builder')">Start Free Trial</button>
-        <button class="lcta-s" onclick="loginAs('client')">Client Preview</button>
+        <button class="lcta-p" onclick="loginAs('builder')">Start Free — No Credit Card</button>
+        <button class="lcta-s" onclick="loginAs('client')">See Client View</button>
       </div>
       <div class="lfeats">
         <div class="lfeat"><div class="lfeat-ic">&#128208;</div><div class="lfeat-tx"><strong>Plan-First</strong>Every dot is anchored to a real location on your drawings.</div></div>
@@ -460,6 +487,8 @@ table.lv a{color:var(--blue);text-decoration:underline;font-size:12px}
       <div class="pbar">
         <span class="plbl" id="plbl"></span>
         <div class="ppips" id="ppips"></div>
+        <div style="flex:1"></div>
+        <button class="btn" id="add-pg-btn" style="font-size:11px;padding:4px 10px;display:none" onclick="addPage()">+ Add Page</button>
       </div>
     </div>
     <div class="dpw" id="dpw">
@@ -513,6 +542,7 @@ table.lv a{color:var(--blue);text-decoration:underline;font-size:12px}
         <button class="btn" onclick="backProj()">&larr; Back</button>
         <button class="btn btn-nv" id="paynewbtn" onclick="showCreatePay()">+ New Request</button>
       </div>
+      <div id="pay-budget-summary"></div>
       <div id="payl"></div>
     </div>
   </div>
@@ -859,15 +889,15 @@ function renderDash(){
   const pn=all.filter(d=>d.status==='pending'||d.status==='choice').length,diff=tb-ta;
   document.getElementById('di').innerHTML=`
     <div class="dg"><h1>${role==='builder'?'Good morning, Marcus.':'Welcome back, Sarah.'}</h1>
-    <p>${role==='builder'?'Here\'s your build portfolio.':'Your active projects.'}</p></div>
-    ${role==='builder'?`<div class="dstats">
-      <div class="dsc"><div class="dsc-l">Projects</div><div style="display:flex;justify-content:space-between"><div class="dsc-v">${projects.length}</div><div class="dsc-bar" style="background:var(--navy)"></div></div><div class="dsc-h">All builds</div></div>
-      <div class="dsc"><div class="dsc-l">Total Dots</div><div style="display:flex;justify-content:space-between"><div class="dsc-v">${all.length}</div><div class="dsc-bar" style="background:var(--blue)"></div></div><div class="dsc-h">Across projects</div></div>
-      <div class="dsc"><div class="dsc-l">Awaiting Decision</div><div style="display:flex;justify-content:space-between"><div class="dsc-v" style="color:var(--amber)">${pn}</div><div class="dsc-bar" style="background:var(--amber)"></div></div><div class="dsc-h">Pending or choice</div></div>
-      <div class="dsc"><div class="dsc-l">Net Variance</div><div style="display:flex;justify-content:space-between"><div class="dsc-v" style="color:${diff>0?'var(--red)':'var(--green)'}">
-        ${diff>0?'+':diff<0?'-':''}$${Math.abs(diff).toLocaleString()}</div><div class="dsc-bar" style="background:${diff>0?'var(--red)':'var(--green)'}"></div></div>
-      <div class="dsc-h">${diff>0?'Over budget':'Under budget'}</div></div>
-    </div>`:''}
+    <p>${role==='builder'?'Here\'s your build portfolio.':
+      'Tap a project to view your floor plan, make selections, and track your budget.'}</p></div>
+    ${role==='client'&&projects.flatMap(p=>p.dots).filter(d=>d.status==='choice'&&!d.clientChoice).length>0?
+      `<div style="background:var(--amber-bg);border:1px solid var(--amber-bd);border-radius:var(--rl);padding:14px 18px;margin-bottom:24px;display:flex;align-items:center;gap:12px">
+        <span style="font-size:20px">⚠</span>
+        <div><div style="font-size:13px;font-weight:600;color:var(--amber)">You have selections to make</div>
+        <div style="font-size:12px;color:var(--ink3);margin-top:2px">Open your project and look for items marked "choice" — your builder is waiting.</div></div>
+      </div>`:``}
+
     <div class="dph"><h2>Your Projects</h2></div>
     <div class="dpg" id="dpg"></div>`;
   const g=document.getElementById('dpg');
@@ -913,7 +943,25 @@ function renderSB(){
         <div class="di-sb">${d.category} · ${d.status==='choice'?'client choice':d.actual>d.allowance?'$'+(d.actual-d.allowance)+' over':'on budget'}</div></div>
       <span class="bdg bdg-${d.paidIn?'pd':d.status==='pending'?'p':d.status==='approved'?'a':d.status==='rejected'?'r':'c'}">${d.paidIn?'paid':d.status}</span>
     </div>`).join('');
-  document.getElementById('psbd').innerHTML=list+(role==='builder'?`<button class="addbtn" onclick="setCtool('dot')">＋ Add Dot</button>`:'');
+  let extras = '';
+  if(role==='builder') {
+    extras = `<button class="addbtn" onclick="setCtool('dot')">＋ Add Dot</button>`;
+  } else {
+    // client task list
+    const tasks = p.dots.filter(d=>d.status==='choice'&&!d.clientChoice);
+    if(tasks.length) {
+      extras = `<div style="margin-top:14px;padding:10px 0 4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--amber);display:flex;align-items:center;gap:6px">
+        <span style="width:16px;height:16px;border-radius:50%;background:var(--amber);color:white;display:inline-flex;align-items:center;justify-content:center;font-size:9px">${tasks.length}</span>
+        Action Required
+      </div>` +
+      tasks.map(d=>`<div class="task-item" onclick="jumpTo('${d.id}')">
+        <div class="task-label">&#9888; Choose an option</div>
+        <div class="task-name">${d.label}</div>
+        <div class="task-sub">${d.category} · ${d.choiceItems.length} options available</div>
+      </div>`).join('');
+    }
+  }
+  document.getElementById('psbd').innerHTML=list+extras;
 }
 function jumpTo(id){
   const p=prj(),d=p.dots.find(x=>x.id===id); if(!d) return;
@@ -1016,8 +1064,11 @@ function renderCanvas(){
   document.getElementById('ppips').innerHTML=p.pages.map((_,i)=>`<div class="pip${i===cpidx?' on':''}" onclick="chgPage(${i-cpidx})"></div>`).join('');
   document.getElementById('ctb').style.display=role==='builder'?'flex':'none';
   drawPlan(pg.svgType);
+  renderPlanUpload(pg);
   renderDots();
   applyT();
+  const apb=document.getElementById('add-pg-btn');
+  if(apb) apb.style.display=role==='builder'?'flex':'none';
 }
 function chgPage(dir){
   const p=prj(),ni=cpidx+dir; if(ni<0||ni>=p.pages.length) return;
@@ -1160,8 +1211,8 @@ function renderDotFt(d){
   const canDec=role==='client'&&d.status==='pending';
   document.getElementById('dp-ft').innerHTML=`
     ${role==='builder'?`<div class="brow" style="margin-bottom:10px">
-      <button class="btn btn-ai" onclick="aiSuggest('${d.id}')">✦ AI Reply</button>
       <button class="btn" onclick="startEdit('${d.id}')">Edit Dot</button>
+      <button class="btn btn-rej" onclick="deleteDot('${d.id}')">Delete Dot</button>
     </div>`:''}
     ${canDec?`<div class="brow" style="margin-bottom:10px">
       <button class="btn btn-app" onclick="setDotSt('${d.id}','approved')">✓ Approve</button>
@@ -1202,23 +1253,6 @@ async function sendMsg(id){
   await persistMsg(id, msg);
   inp.value=''; openDot(id);
 }
-async function aiSuggest(id){
-  const d=dt(id); if(!d) return;
-  const aa=document.getElementById('ai-area');
-  aa.innerHTML=`<div class="ai-th"><div class="ai-d"></div><div class="ai-d"></div><div class="ai-d"></div><span style="font-size:11px;color:var(--purple);margin-left:6px">Drafting reply…</span></div>`;
-  const ov=d.actual-d.allowance;
-  const thread=d.messages.map(m=>`${m.name||m.role}: ${m.text}`).join('\n');
-  try{
-    const res=await fetch(CAPI,{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,
-        messages:[{role:'user',content:`You are Marcus Reed, a builder using SpecDot. Item: ${d.label} (${d.category}). Product: ${d.product||'TBD'}. Allowance: $${d.allowance}. Actual: $${d.actual}${ov>0?` (+$${ov} over)`:ov<0?` (-$${Math.abs(ov)} under)`:''}.  Status: ${d.status}. Notes: ${d.notes}.\nConversation:\n${thread}\nWrite a short professional 2-3 sentence reply. Be direct and action-oriented.`}]})});
-    const data=await res.json();
-    const txt=(data.content?.[0]?.text||'').trim();
-    const aiMsg={role:'builder',name:'Marcus Reed',text:'[AI] '+txt,ts:'Just now'};
-    d.messages.push(aiMsg);
-    await persistMsg(id, aiMsg);
-    aa.innerHTML=''; openDot(id);
-  }catch(e){aa.innerHTML=`<div style="font-size:12px;color:var(--red);padding:8px;margin-top:8px">AI unavailable.</div>`;}
 }
 function closePanel(){
   adid=null;
@@ -1296,6 +1330,56 @@ async function saveDot(){
   renderDots();renderSB();
   closeM('m-dot');pxy=null;edid=null;
   toast('Dot saved.');
+}
+
+// PLAN IMAGE UPLOAD
+function renderPlanUpload(pg) {
+  const pp = document.getElementById('plan-p');
+  const existing = pp.querySelector('.plan-upload');
+  if(existing) existing.remove();
+  const stored = localStorage.getItem('plan_img_' + pg.id);
+  if(stored) {
+    pp.style.backgroundImage = `url(${stored})`;
+    pp.style.backgroundSize = 'cover';
+    pp.style.backgroundPosition = 'center';
+    // add small replace button
+    if(role==='builder') {
+      const btn = document.createElement('button');
+      btn.style.cssText='position:absolute;top:10px;right:10px;z-index:20;background:rgba(255,255,255,.9);border:1px solid var(--cream3);border-radius:var(--r);padding:4px 10px;font-size:11px;cursor:pointer;font-family:var(--fb);color:var(--ink2)';
+      btn.textContent='Replace Plan';
+      btn.onclick = () => triggerPlanUpload(pg.id);
+      pp.appendChild(btn);
+    }
+  } else {
+    pp.style.backgroundImage = '';
+    if(role==='builder') {
+      const div = document.createElement('div');
+      div.className = 'plan-upload';
+      div.innerHTML = `<div class="plan-upload-ic">&#128196;</div>
+        <div class="plan-upload-tx">Upload Floor Plan</div>
+        <div class="plan-upload-sub">PNG, JPG or PDF · Click to upload</div>`;
+      div.onclick = () => triggerPlanUpload(pg.id);
+      pp.appendChild(div);
+    }
+  }
+}
+function triggerPlanUpload(pgId) {
+  const inp = document.createElement('input');
+  inp.type='file'; inp.accept='image/*,application/pdf';
+  inp.onchange = async (e) => {
+    const file = e.target.files[0]; if(!file) return;
+    if(file.type==='application/pdf') { toast('PDF upload coming soon — use PNG or JPG for now.'); return; }
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      localStorage.setItem('plan_img_'+pgId, ev.target.result);
+      const p=prj(); if(!p) return;
+      const pg=p.pages.find(x=>x.id===pgId); if(!pg) return;
+      renderPlanUpload(pg);
+      toast('Plan uploaded!');
+    };
+    reader.readAsDataURL(file);
+  };
+  inp.click();
 }
 
 // PLAN SVG
@@ -1448,6 +1532,45 @@ async function delCatItem(catId,ciId){
   await deleteCatItem(ciId);
   renderCatalog();
 }
+async function deleteProject(pid) {
+  if(!confirm('Delete this project? This cannot be undone.')) return;
+  await sbDelete('payments','?project_id=eq.'+pid);
+  // get dot ids first to delete messages
+  const dots = projects.find(p=>p.id===pid)?.dots||[];
+  for(const d of dots) {
+    await sbDelete('messages','?dot_id=eq.'+d.id);
+  }
+  await sbDelete('dots','?project_id=eq.'+pid);
+  await sbDelete('pages','?project_id=eq.'+pid);
+  await sbDelete('projects','?id=eq.'+pid);
+  projects = projects.filter(p=>p.id!==pid);
+  renderDash();
+  toast('Project deleted.');
+}
+async function deleteDot(id) {
+  if(!confirm('Delete this dot?')) return;
+  const p=prj(); if(!p) return;
+  await sbDelete('messages','?dot_id=eq.'+id);
+  await sbDelete('dots','?id=eq.'+id);
+  p.dots = p.dots.filter(d=>d.id!==id);
+  closePanel();
+  renderDots();
+  renderSB();
+  toast('Dot deleted.');
+}
+async function addPage() {
+  const p=prj(); if(!p) return;
+  const label = prompt('Page name (e.g. Electrical, Plumbing):');
+  if(!label||!label.trim()) return;
+  const svgTypes = ['kitchen','electrical','plumbing','bath'];
+  const pg={_new:true,id:null,label:label.trim(),svgType:'kitchen',sort_order:p.pages.length};
+  await persistPage(pg, p.id);
+  delete pg._new;
+  p.pages.push(pg);
+  cpidx=p.pages.length-1;
+  renderCanvas();renderSB();
+  toast('Page added — upload your plan image.');
+}
 async function saveProj(){
   const name=document.getElementById('fi-pn').value.trim(); if(!name) return;
   const addr=document.getElementById('fi-pa').value.trim();
@@ -1525,8 +1648,40 @@ async function savePay(){
 function renderPayments(){
   const p=prj(); if(!p) return;
   const pnb=document.getElementById('paynewbtn'); if(pnb) pnb.style.display=role==='builder'?'flex':'none';
+
+  // Client budget summary banner
+  const bsEl = document.getElementById('pay-budget-summary');
+  if(bsEl && role==='client') {
+    const ta=p.dots.reduce((s,d)=>s+d.allowance,0);
+    const tb=p.dots.reduce((s,d)=>s+d.actual,0);
+    const ov=tb-ta;
+    const pending=p.dots.filter(d=>d.status==='choice'&&!d.clientChoice).length;
+    bsEl.innerHTML=`<div class="client-budget-bar">
+      <div style="font-family:var(--fd);font-size:16px;font-weight:600;margin-bottom:12px">Your Budget Summary</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px">
+        <div style="background:var(--cream2);border-radius:var(--r);padding:12px;text-align:center">
+          <div style="font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px">Total Allowance</div>
+          <div style="font-family:var(--fd);font-size:22px;font-weight:700">$${ta.toLocaleString()}</div>
+        </div>
+        <div style="background:var(--cream2);border-radius:var(--r);padding:12px;text-align:center">
+          <div style="font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px">Selected So Far</div>
+          <div style="font-family:var(--fd);font-size:22px;font-weight:700">$${tb.toLocaleString()}</div>
+        </div>
+        <div style="background:${ov>0?'var(--red-bg)':ov<0?'var(--green-bg)':'var(--cream2)'};border-radius:var(--r);padding:12px;text-align:center;border:1px solid ${ov>0?'var(--red-bd)':ov<0?'var(--green-bd)':'var(--cream3)'}">
+          <div style="font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px">${ov>0?'Over Budget':ov<0?'Under Budget':'On Budget'}</div>
+          <div style="font-family:var(--fd);font-size:22px;font-weight:700;color:${ov>0?'var(--red)':ov<0?'var(--green)':'var(--ink)'}">${ov>0?'+':ov<0?'-':''}$${Math.abs(ov).toLocaleString()}</div>
+        </div>
+      </div>
+      ${pending?`<div style="background:var(--amber-bg);border:1px solid var(--amber-bd);border-radius:var(--r);padding:10px 14px;font-size:13px;color:var(--amber);font-weight:500">
+        ⚠ You have ${pending} selection${pending>1?'s':''} still to make — go to the plan view to choose.
+      </div>`:'<div style="background:var(--green-bg);border:1px solid var(--green-bd);border-radius:var(--r);padding:10px 14px;font-size:13px;color:var(--green);font-weight:500">✓ All selections complete</div>'}
+    </div>`;
+  } else if(bsEl) {
+    bsEl.innerHTML='';
+  }
+
   if(!p.payments.length){
-    document.getElementById('payl').innerHTML=`<div class="es"><div class="es-ic">💳</div><p>No payment requests yet.</p>${role==='builder'?`<button class="btn btn-nv" onclick="showCreatePay()">Create First Request</button>`:''}</div>`;
+    document.getElementById('payl').innerHTML=`<div class="es"><div class="es-ic">💳</div><p>${role==='client'?'No payment requests from your builder yet.':'No payment requests yet.'}</p>${role==='builder'?`<button class="btn btn-nv" onclick="showCreatePay()">Create First Request</button>`:''}</div>`;
     return;
   }
   document.getElementById('payl').innerHTML=p.payments.map((pay,i)=>{
